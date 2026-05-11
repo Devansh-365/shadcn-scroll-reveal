@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-reveal",
+  "type": "registry:component",
+  "title": "Scroll Reveal",
+  "description": "Sticky image reveal with scroll-driven caption animations. Pure CSS, no JS. Respects prefers-reduced-motion.",
+  "files": [
+    {
+      "path": "src/registry/new-york/components/scroll-reveal/scroll-reveal.tsx",
+      "type": "registry:component",
+      "target": "components/scroll-reveal/scroll-reveal.tsx"
+    }
+  ]
+}

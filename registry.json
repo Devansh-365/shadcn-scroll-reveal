@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "shadcn-scroll-reveal",
+  "homepage": "https://shadcn-scroll-reveal.vercel.app",
+  "title": "Shadcn Scroll Reveal",
+  "description": "Pure CSS scroll-driven image reveals and caption animations for shadcn/ui. No JavaScript required.",
+  "author": "Devansh Tiwari",
+  "items": [
+    {
+      "name": "scroll-reveal",
+      "type": "registry:component",
+      "title": "Scroll Reveal",
+      "description": "Sticky image reveal with scroll-driven caption animations. Pure CSS, no JS. Respects prefers-reduced-motion.",
+      "files": [
+        {
+          "path": "src/registry/new-york/components/scroll-reveal/scroll-reveal.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
