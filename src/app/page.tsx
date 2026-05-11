@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowDown, ExternalLink } from "lucide-react"
+import { ArrowDown, ExternalLink, Star } from "lucide-react"
 import { ScrollReveal } from "@/registry/new-york/components/scroll-reveal/scroll-reveal"
 import CopyCommand from "@/features/auto-install/copy-command"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { siteConfig } from "@/config/site"
+import { type ReactNode } from "react"
 
 const SVG1 =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Crect width='1200' height='700' fill='%234e6f4d'/%3E%3Ccircle cx='880' cy='180' r='150' fill='%23e6b450'/%3E%3Cpath d='M0 520 C220 410 390 560 610 430 C800 320 930 420 1200 280 L1200 700 L0 700 Z' fill='%2326351f'/%3E%3Cpath d='M0 610 C230 520 460 630 690 520 C890 430 990 500 1200 390 L1200 700 L0 700 Z' fill='%237a4f2a'/%3E%3C/svg%3E"
@@ -17,115 +18,314 @@ const SVG2 =
 const SVG3 =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Crect width='1200' height='700' fill='%231d3140'/%3E%3Ccircle cx='1000' cy='150' r='120' fill='%23ffcf70'/%3E%3Cpath d='M0 500 C180 380 330 540 520 420 C720 295 880 450 1200 300 L1200 700 L0 700 Z' fill='%23325a4b'/%3E%3Cpath d='M0 620 C220 500 420 650 650 520 C850 410 1020 560 1200 470 L1200 700 L0 700 Z' fill='%23b86d38'/%3E%3C/svg%3E"
 
+function CodePreview() {
+  return (
+    <div className="hidden md:flex flex-col rounded-xl border border-border bg-muted/20 overflow-hidden font-mono text-xs">
+      <div className="flex items-center gap-1.5 border-b border-border bg-muted/40 px-4 py-2.5">
+        <div className="size-2.5 rounded-full bg-red-400/50" />
+        <div className="size-2.5 rounded-full bg-yellow-400/50" />
+        <div className="size-2.5 rounded-full bg-green-400/50" />
+        <span className="ml-2 text-muted-foreground">scroll-reveal.tsx</span>
+      </div>
+      <div className="p-5 leading-7">
+        <div>
+          <span className="text-muted-foreground">&lt;</span>
+          <span className="text-foreground font-semibold">ScrollReveal</span>
+        </div>
+        <div className="pl-4">
+          <span className="text-foreground">imageEnter</span>
+          <span className="text-muted-foreground">=</span>
+          <span className="text-green-600 dark:text-green-400">&quot;left&quot;</span>
+        </div>
+        <div className="pl-4">
+          <span className="text-foreground">captionMotion</span>
+          <span className="text-muted-foreground">=</span>
+          <span className="text-green-600 dark:text-green-400">&quot;left-center&quot;</span>
+        </div>
+        <div className="pl-4">
+          <span className="text-foreground">imageStickTop</span>
+          <span className="text-muted-foreground">=</span>
+          <span className="text-green-600 dark:text-green-400">&quot;4.5rem&quot;</span>
+        </div>
+        <div className="pl-4 text-muted-foreground">
+          <span className="text-foreground">image</span>
+          {`={`}
+          <span className="text-blue-500 dark:text-blue-400">&lt;img /&gt;</span>
+          {`}`}
+        </div>
+        <div className="pl-4 text-muted-foreground">
+          <span className="text-foreground">caption</span>
+          {`={`}
+          <span className="text-blue-500 dark:text-blue-400">&lt;p /&gt;</span>
+          {`}`}
+        </div>
+        <div className="text-muted-foreground">/&gt;</div>
+      </div>
+      <div className="border-t border-border bg-muted/10 px-4 py-3 flex flex-wrap gap-1.5">
+        {["Pure CSS", "No JS", "prefers-reduced-motion", "animation-timeline: view()"].map((tag) => (
+          <span
+            key={tag}
+            className="rounded-md bg-muted px-2 py-0.5 text-[10px] text-muted-foreground"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SceneSection({
+  num,
+  title,
+  children,
+}: {
+  num: string
+  title: string
+  children: ReactNode
+}) {
+  return (
+    <section className="container max-w-3xl py-16">
+      <div className="flex items-start gap-4">
+        <span className="mt-0.5 shrink-0 rounded border border-border bg-muted/50 px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
+          {num}
+        </span>
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+          <p className="mt-2 text-base leading-relaxed text-muted-foreground">
+            {children}
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function InstallStep({
+  number,
+  title,
+  isLast = false,
+  children,
+}: {
+  number: string
+  title: string
+  isLast?: boolean
+  children: ReactNode
+}) {
+  return (
+    <div className="flex gap-5">
+      <div className="flex flex-col items-center">
+        <div className="size-7 shrink-0 rounded-full border-2 border-foreground bg-background flex items-center justify-center font-mono text-xs font-bold">
+          {number}
+        </div>
+        {!isLast && <div className="mt-2 w-px flex-1 bg-border" />}
+      </div>
+      <div className={isLast ? "pt-0.5" : "pb-10 pt-0.5"}>
+        <p className="font-medium">{title}</p>
+        <div className="mt-2 text-sm text-muted-foreground">{children}</div>
+      </div>
+    </div>
+  )
+}
+
+const Inline = ({ children }: { children: ReactNode }) => (
+  <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+    {children}
+  </code>
+)
+
+const PROPS = [
+  {
+    name: "image",
+    type: "ReactNode",
+    default: "—",
+    required: true,
+    desc: "Content inside the sticky image container (img, video, svg)",
+  },
+  {
+    name: "caption",
+    type: "ReactNode",
+    default: "—",
+    required: false,
+    desc: "Caption content; omit entirely for image-only scenes",
+  },
+  {
+    name: "imageEnter",
+    type: '"left" | "right" | "top" | "bottom" | "none"',
+    default: '"bottom"',
+    required: false,
+    desc: "Direction the image slides in from on entry",
+  },
+  {
+    name: "captionMotion",
+    type: '"left-center" | "right-center" | "left-right" | "right-left"',
+    default: "—",
+    required: false,
+    desc: "Horizontal animation path of the caption box",
+  },
+  {
+    name: "sceneDuration",
+    type: "string",
+    default: '"220svh"',
+    required: false,
+    desc: "Total scroll height allocated to the scene",
+  },
+  {
+    name: "imageHeight",
+    type: "string",
+    default: '"66svh"',
+    required: false,
+    desc: "Height of the sticky image",
+  },
+  {
+    name: "imageStickTop",
+    type: "string",
+    default: '"0"',
+    required: false,
+    desc: "Sticky top offset — set to your header height",
+  },
+  {
+    name: "captionDelay",
+    type: "string",
+    default: '"40svh"',
+    required: false,
+    desc: "Scroll distance before the caption appears",
+  },
+  {
+    name: "captionMotionDistance",
+    type: "string",
+    default: '"80vw"',
+    required: false,
+    desc: "Horizontal distance the caption travels",
+  },
+  {
+    name: "sceneExitSpace",
+    type: "string",
+    default: '"55svh"',
+    required: false,
+    desc: "Padding after the scene ends",
+  },
+  {
+    name: "captionMaxWidth",
+    type: "string",
+    default: '"52rem"',
+    required: false,
+    desc: "Max width of the caption card",
+  },
+  {
+    name: "imageFit",
+    type: '"cover" | "contain"',
+    default: '"cover"',
+    required: false,
+    desc: "CSS object-fit for the image element",
+  },
+  {
+    name: "imagePosition",
+    type: "string",
+    default: '"center"',
+    required: false,
+    desc: "CSS object-position for the image element",
+  },
+  {
+    name: "imageStartScale",
+    type: "string",
+    default: '".96"',
+    required: false,
+    desc: "Initial scale of the image before it animates in",
+  },
+]
+
 export default function Home() {
   return (
     <main>
-      <section className="container max-w-3xl py-20 md:py-32">
-        <div className="flex flex-col gap-6">
-          <Badge variant="outline" className="w-fit">
-            Pure CSS · No JavaScript
-          </Badge>
-          <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
-            Scroll-driven storytelling
-            <br />
-            for shadcn/ui
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-xl">
-            Sticky image reveals with animated captions. Built on the CSS
-            Scroll-Driven Animations API. Zero JavaScript, fully accessible,
-            respects reduced-motion.
-          </p>
-          <CopyCommand />
-          <p className="text-sm text-muted-foreground flex items-center gap-2">
-            <ArrowDown className="size-4" />
-            Scroll to see it live
-          </p>
+      {/* ── Hero ─────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 md:py-32">
+        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">Pure CSS</Badge>
+              <Badge variant="outline">No JavaScript</Badge>
+              <Badge variant="outline">Accessible</Badge>
+            </div>
+            <h1 className="text-5xl font-bold tracking-tighter leading-none md:text-6xl">
+              Scroll-driven
+              <br />
+              storytelling
+              <br />
+              for shadcn/ui
+            </h1>
+            <p className="max-w-[52ch] text-base leading-relaxed text-muted-foreground">
+              Sticky image reveals with animated captions. Built on the CSS
+              Scroll-Driven Animations API — zero JavaScript, fully accessible,
+              respects{" "}
+              <Inline>prefers-reduced-motion</Inline>.
+            </p>
+            <CopyCommand />
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+              <ArrowDown className="size-4" />
+              Scroll to see it live
+            </p>
+          </div>
+          <CodePreview />
         </div>
       </section>
 
       <Separator />
 
-      <section className="container max-w-3xl py-16">
-        <h2 className="text-2xl font-semibold">
-          Scene 1: Image enters from the left
-        </h2>
-        <p className="mt-2 text-muted-foreground">
-          Add{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-            imageEnter="left"
-          </code>{" "}
-          to slide the image in from the left as it enters the viewport. The
-          caption appears in its natural flow position.
-        </p>
-      </section>
+      {/* ── Demo scenes ──────────────────────────────────────────── */}
+      <SceneSection num="01" title="Image enters from the left">
+        Add <Inline>imageEnter=&quot;left&quot;</Inline> to slide the image in
+        from the left as it enters the viewport. The caption appears in its
+        natural flow position below the sticky image.
+      </SceneSection>
 
       <ScrollReveal
         imageEnter="left"
         imageStickTop="4.5rem"
-        image={
-          <img src={SVG1} alt="Abstract green landscape with warm sun" />
-        }
+        image={<img src={SVG1} alt="Abstract green landscape with warm sun" />}
         caption={
           <>
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="mb-2 text-xl font-semibold">
               imageEnter=&quot;left&quot;
             </h2>
             <p className="text-sm text-muted-foreground">
-              The image slides in from the left. No caption motion class
-              applied — the caption appears in its natural position below.
+              The image slides in from the left. No captionMotion applied — the
+              caption appears in its natural position below.
             </p>
           </>
         }
       />
 
-      <section className="container max-w-3xl py-16">
-        <h2 className="text-2xl font-semibold">Scene 2: Caption sweeps in</h2>
-        <p className="mt-2 text-muted-foreground">
-          Combine{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-            imageEnter="bottom"
-          </code>{" "}
-          with{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-            captionMotion="left-center"
-          </code>{" "}
-          — the caption starts off-screen left and lands in the center as you
-          scroll.
-        </p>
-      </section>
+      <SceneSection num="02" title="Caption sweeps in from the side">
+        Combine <Inline>imageEnter=&quot;bottom&quot;</Inline> with{" "}
+        <Inline>captionMotion=&quot;left-center&quot;</Inline> — the caption
+        starts off-screen and lands in the center reading position as you scroll.
+      </SceneSection>
 
       <ScrollReveal
         imageEnter="bottom"
         captionMotion="left-center"
         imageStickTop="4.5rem"
         captionMotionDistance="70vw"
-        image={
-          <img src={SVG2} alt="Abstract purple mountain landscape" />
-        }
+        image={<img src={SVG2} alt="Abstract purple mountain landscape" />}
         caption={
           <>
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="mb-2 text-xl font-semibold">
               captionMotion=&quot;left-center&quot;
             </h2>
             <p className="text-sm text-muted-foreground">
-              The caption animates from the left into the center reading
-              position. Great for readable body text.
+              The caption animates from off-screen left into the center reading
+              position. Great for body text you want users to actually read.
             </p>
           </>
         }
       />
 
-      <section className="container max-w-3xl py-16">
-        <h2 className="text-2xl font-semibold">Scene 3: Full pass-through</h2>
-        <p className="mt-2 text-muted-foreground">
-          Use{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-            captionMotion="right-left"
-          </code>{" "}
-          for a dramatic full-width pass-through. Best for short labels, not
-          long body text.
-        </p>
-      </section>
+      <SceneSection num="03" title="Full pass-through motion">
+        Use <Inline>captionMotion=&quot;right-left&quot;</Inline> for a
+        dramatic full-width sweep. Works best for short labels — reduce{" "}
+        <Inline>captionMaxWidth</Inline> for a tighter card.
+      </SceneSection>
 
       <ScrollReveal
         imageEnter="right"
@@ -133,373 +333,206 @@ export default function Home() {
         imageStickTop="4.5rem"
         captionMotionDistance="90vw"
         captionMaxWidth="34rem"
-        image={
-          <img src={SVG3} alt="Abstract dark blue landscape with warm hills" />
-        }
+        image={<img src={SVG3} alt="Abstract dark blue landscape with warm hills" />}
         caption={
           <>
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="mb-2 text-xl font-semibold">
               captionMotion=&quot;right-left&quot;
             </h2>
             <p className="text-sm text-muted-foreground">
-              The caption crosses the full stage. Use a smaller max-width for
-              pass-through motion.
+              The caption crosses the full width of the stage. Use a smaller
+              captionMaxWidth for pass-through effects.
             </p>
           </>
         }
       />
 
-      <Separator className="my-4" />
+      <Separator />
 
+      {/* ── Installing ───────────────────────────────────────────── */}
       <section className="container max-w-3xl py-16">
-        <h2 className="text-3xl font-bold mb-2">Installing</h2>
-        <p className="text-muted-foreground mb-8">
-          Add the component to your shadcn project.
+        <h2 className="text-3xl font-bold tracking-tight">Installing</h2>
+        <p className="mt-2 text-muted-foreground">
+          Add the component to any existing shadcn project.
         </p>
-        <Tabs defaultValue="auto">
-          <TabsList className="mb-4 w-full [&>*]:flex-1">
+
+        <Tabs defaultValue="auto" className="mt-8">
+          <TabsList className="mb-6 w-full [&>*]:flex-1">
             <TabsTrigger value="auto">Auto (CLI)</TabsTrigger>
             <TabsTrigger value="manual">Manual</TabsTrigger>
           </TabsList>
+
           <TabsContent value="auto" className="flex flex-col gap-4">
             <p className="text-sm text-muted-foreground">
-              Install via the shadcn CLI in one command.
+              One command installs the component and all dependencies.
             </p>
             <CopyCommand />
             <p className="text-sm text-muted-foreground">
-              Then add the CSS layer to your{" "}
-              <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-                globals.css
-              </code>{" "}
-              — see the{" "}
+              Then append the <Inline>@layer vanilla-scroll-sky</Inline> block
+              from the{" "}
               <a
                 href={siteConfig.githubUrl}
-                className="underline underline-offset-4"
+                className="underline underline-offset-4 transition-colors hover:text-foreground"
               >
                 GitHub repo
               </a>{" "}
-              for the full CSS.
+              to your <Inline>globals.css</Inline>.
             </p>
           </TabsContent>
-          <TabsContent value="manual" className="flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <p className="font-medium">
-                Step 1 — Add the CSS layer to your{" "}
-                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-                  globals.css
-                </code>
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Copy the{" "}
-                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-                  @layer vanilla-scroll-sky
-                </code>{" "}
-                block from the{" "}
-                <a
-                  href={siteConfig.githubUrl}
-                  className="underline underline-offset-4"
-                >
-                  GitHub repo
-                </a>{" "}
-                and append it to your globals.css.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="font-medium">Step 2 — Copy the component</p>
-              <p className="text-sm text-muted-foreground">
-                Copy{" "}
-                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-                  scroll-reveal.tsx
-                </code>{" "}
-                into{" "}
-                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-                  components/scroll-reveal/
-                </code>{" "}
-                in your project.
-              </p>
-            </div>
+
+          <TabsContent value="manual" className="flex flex-col gap-0">
+            <InstallStep number="1" title="Add the CSS layer">
+              Copy the <Inline>@layer vanilla-scroll-sky</Inline> block from{" "}
+              <a
+                href={siteConfig.githubUrl}
+                className="underline underline-offset-4 transition-colors hover:text-foreground"
+              >
+                globals.css on GitHub
+              </a>{" "}
+              and append it to your project&apos;s <Inline>globals.css</Inline>.
+              This is the only CSS you need — the component itself has no styles.
+            </InstallStep>
+            <InstallStep number="2" title="Copy the component" isLast>
+              Copy <Inline>scroll-reveal.tsx</Inline> into{" "}
+              <Inline>components/scroll-reveal/</Inline> in your project. It has
+              no runtime dependencies — only the CSS layer and{" "}
+              <Inline>@/lib/utils</Inline>.
+            </InstallStep>
           </TabsContent>
         </Tabs>
       </section>
 
-      <Separator className="my-4" />
+      <Separator />
 
-      <section className="container max-w-3xl py-16 pb-32">
-        <h2 className="text-3xl font-bold mb-2">Props</h2>
-        <p className="text-muted-foreground mb-8">
-          All CSS custom properties are exposed as typed React props.
+      {/* ── Props ────────────────────────────────────────────────── */}
+      <section className="container max-w-3xl py-16">
+        <h2 className="text-3xl font-bold tracking-tight">Props</h2>
+        <p className="mt-2 text-muted-foreground">
+          Every CSS custom property is exposed as a typed React prop.
         </p>
 
-        <div className="overflow-x-auto rounded-lg border border-border">
+        <div className="mt-8 overflow-x-auto rounded-lg border border-border">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr>
+            <thead>
+              <tr className="border-b border-border bg-muted/40">
                 <th className="px-4 py-3 text-left font-medium">Prop</th>
                 <th className="px-4 py-3 text-left font-medium">Type</th>
                 <th className="px-4 py-3 text-left font-medium">Default</th>
-                <th className="px-4 py-3 text-left font-medium">
+                <th className="hidden px-4 py-3 text-left font-medium md:table-cell">
                   Description
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    image
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">ReactNode</td>
-                <td className="px-4 py-3 text-muted-foreground">—</td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Content inside the sticky image container (img, video, svg)
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    caption
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">ReactNode</td>
-                <td className="px-4 py-3 text-muted-foreground">—</td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Optional caption content; omit for image-only scenes
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    imageEnter
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  &quot;left&quot; | &quot;right&quot; | &quot;top&quot; |
-                  &quot;bottom&quot; | &quot;none&quot;
-                </td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;bottom&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Direction the image enters from
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    captionMotion
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  &quot;left-center&quot; | &quot;right-center&quot; |
-                  &quot;left-right&quot; | &quot;right-left&quot;
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">—</td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Caption animation direction
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    sceneDuration
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;220svh&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Total scroll height of the scene
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    imageHeight
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;66svh&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Height of the sticky image
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    imageStickTop
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;0&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Top offset when image is sticky (set to your header height)
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    captionDelay
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;40svh&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Space before caption appears below image
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    captionMotionDistance
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;80vw&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  How far the caption travels horizontally
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    sceneExitSpace
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;55svh&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Padding after the scene
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    captionMaxWidth
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;52rem&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Max width of the caption box
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    imageFit
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  &quot;cover&quot; | &quot;contain&quot;
-                </td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;cover&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  CSS object-fit for the image
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    imagePosition
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;center&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  CSS object-position for the image
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    imageStartScale
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">string</td>
-                <td className="px-4 py-3">
-                  <code className="rounded bg-muted px-1 rounded text-xs font-mono">
-                    &quot;.96&quot;
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Initial scale before image animates in
-                </td>
-              </tr>
+            <tbody>
+              {PROPS.map((p, i) => (
+                <tr
+                  key={p.name}
+                  className={
+                    i % 2 === 0
+                      ? "border-b border-border"
+                      : "border-b border-border bg-muted/20"
+                  }
+                >
+                  <td className="px-4 py-3 align-top">
+                    <div className="flex items-center gap-1.5">
+                      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+                        {p.name}
+                      </code>
+                      {p.required && (
+                        <span className="text-destructive text-xs" title="required">
+                          *
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 align-top">
+                    <code className="font-mono text-xs text-muted-foreground">
+                      {p.type}
+                    </code>
+                  </td>
+                  <td className="px-4 py-3 align-top">
+                    <code className="font-mono text-xs text-muted-foreground">
+                      {p.default}
+                    </code>
+                  </td>
+                  <td className="hidden px-4 py-3 align-top text-muted-foreground md:table-cell">
+                    {p.desc}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4">
-          <h3 className="text-xl font-semibold">Basic usage</h3>
-          <div className="rounded-lg bg-zinc-950 dark:bg-zinc-900 border border-zinc-800 p-4">
-            <pre className="text-sm text-zinc-100 overflow-x-auto font-mono">
+        {/* Usage example */}
+        <div className="mt-12">
+          <h3 className="text-xl font-semibold tracking-tight">Basic usage</h3>
+          <div className="mt-4 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950">
+            <div className="flex items-center gap-1.5 border-b border-zinc-800 px-4 py-2.5">
+              <div className="size-2.5 rounded-full bg-red-400/50" />
+              <div className="size-2.5 rounded-full bg-yellow-400/50" />
+              <div className="size-2.5 rounded-full bg-green-400/50" />
+              <span className="ml-2 font-mono text-xs text-zinc-500">
+                my-page.tsx
+              </span>
+            </div>
+            <pre className="overflow-x-auto p-5 font-mono text-xs leading-6 text-zinc-100">
               <code>{`import { ScrollReveal } from "@/components/scroll-reveal/scroll-reveal"
 
 <ScrollReveal
   imageEnter="left"
-  image={<img src="/your-image.jpg" alt="..." />}
+  imageStickTop="4.5rem"
+  image={<img src="/hero.jpg" alt="..." />}
   caption={
     <>
       <h2>Your headline</h2>
-      <p>Your caption text here.</p>
+      <p>A short caption that appears as you scroll.</p>
     </>
   }
 />`}</code>
             </pre>
           </div>
         </div>
+      </section>
 
-        <div className="mt-16 flex flex-col gap-4 items-start">
-          <p className="text-muted-foreground">
-            Found this useful? Star the repo on GitHub.
-          </p>
-          <Link
-            href={siteConfig.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({ variant: "outline" })}
-          >
-            <ExternalLink className="size-4" />
-            Star on GitHub
-          </Link>
+      {/* ── GitHub CTA ───────────────────────────────────────────── */}
+      <section className="border-t border-border">
+        <div className="container max-w-3xl py-16">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+            <div>
+              <h3 className="text-xl font-semibold tracking-tight">
+                Find it useful?
+              </h3>
+              <p className="mt-1 text-muted-foreground">
+                Star the repo and share it with your team.
+              </p>
+            </div>
+            <Link
+              href={siteConfig.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              <Star className="size-4" />
+              Star on GitHub
+            </Link>
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 gap-4 border-t border-border pt-10 sm:grid-cols-4">
+            {[
+              { label: "Runtime JS", value: "0 bytes" },
+              { label: "Dependencies", value: "none" },
+              { label: "Browser API", value: "scroll-driven" },
+              { label: "Reduced motion", value: "supported" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <p className="font-mono text-2xl font-bold tracking-tighter">
+                  {stat.value}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </main>
