@@ -1,0 +1,1 @@
+Shadcn Scroll Reveal — Pure CSS scroll-driven image reveals and caption animations for shadcn/ui. No JavaScript required.

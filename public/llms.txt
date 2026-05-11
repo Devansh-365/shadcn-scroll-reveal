@@ -1,0 +1,71 @@
+# Shadcn Scroll Reveal
+
+> Pure CSS scroll-driven image reveals and caption animations for shadcn/ui. No JavaScript required.
+
+## What it is
+
+Shadcn Scroll Reveal is a copy-paste UI component for shadcn/ui projects that implements scroll-driven image reveal animations and caption slide-in effects using only the native CSS Scroll-Driven Animations API (`animation-timeline: view()`). Zero JavaScript, zero dependencies beyond shadcn/ui.
+
+## Key features
+
+- CSS-only: uses `animation-timeline: view()` and `animation-range`
+- Image entry animations: fade + translate from any direction (left, right, top, bottom)
+- Caption animations: slide in from left, right, or cross-slide
+- Sticky image layout with scroll-linked parallax feel
+- Fully responsive, works in dark and light mode
+- Graceful degradation for unsupported browsers and `prefers-reduced-motion`
+- Built with Tailwind CSS and shadcn/ui design tokens
+
+## Installation
+
+### npx (recommended)
+
+```bash
+npx shadcn@latest add https://shadcn-scroll-reveal.vercel.app/r/scroll-reveal.json
+```
+
+### Manual
+
+1. Copy the CSS layer into your `globals.css`
+2. Use the `.vss`, `.vss__image`, and `.vss__caption` class structure in your JSX
+
+## Usage
+
+```tsx
+<div className="vss vss--image-bottom vss--caption-left-center">
+  <div className="vss__image">
+    <img src="..." alt="..." />
+  </div>
+  <div className="vss__caption">
+    <h2>Your heading</h2>
+    <p>Your description</p>
+  </div>
+</div>
+```
+
+## CSS custom properties (props)
+
+| Property | Default | Description |
+|---|---|---|
+| `--vss-scene-duration` | `220svh` | Total scroll height of the scene |
+| `--vss-caption-delay` | `40svh` | How far down before caption appears |
+| `--vss-caption-motion-distance` | `80vw` | Caption travel distance |
+| `--vss-image-height` | `66svh` | Height of the sticky image |
+| `--vss-image-start-scale` | `0.96` | Image start scale (zooms in on reveal) |
+| `--vss-scene-exit-space` | `55svh` | Space after the scene for the next section |
+
+## Modifier classes
+
+**Image direction:** `vss--image-left`, `vss--image-right`, `vss--image-top`, `vss--image-bottom`
+
+**Caption direction:** `vss--caption-left-center`, `vss--caption-right-center`, `vss--caption-left-right`, `vss--caption-right-left`
+
+## Browser support
+
+Works in any browser that supports the CSS Scroll-Driven Animations API (Chrome 115+, Edge 115+). Falls back gracefully (images and captions visible, no animation) in Firefox and Safari via `@supports not (animation-timeline: view())`.
+
+## Source
+
+- GitHub: https://github.com/Devansh-365/shadcn-scroll-reveal
+- Registry: https://shadcn-scroll-reveal.vercel.app/r/scroll-reveal.json
+- Docs: https://shadcn-scroll-reveal.vercel.app/
