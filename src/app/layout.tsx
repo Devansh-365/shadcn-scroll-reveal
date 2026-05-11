@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { ibmPlexSans, jetbrainsMono } from "@/lib/fonts"
+import { geistSans, geistMono } from "@/lib/fonts"
 import ThemeProvider from "@/providers/theme-provider"
 import { Header } from "@/components/header"
 import Footer from "@/components/footer/footer"
@@ -26,8 +26,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          ibmPlexSans.variable,
-          jetbrainsMono.variable,
+          geistSans.variable,
+          geistMono.variable,
           "antialiased bg-background text-foreground min-h-screen flex flex-col"
         )}
       >

@@ -1,24 +1,43 @@
 import Link from "next/link"
-import { ArrowDown, Star } from "lucide-react"
+import { ArrowDown, Info, Star } from "lucide-react"
 import { ScrollReveal } from "@/registry/new-york/components/scroll-reveal/scroll-reveal"
 import CopyCommand from "@/features/auto-install/copy-command"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import {
+  Timeline,
+  TimelineContent,
+  TimelineDot,
+  TimelineHeading,
+  TimelineItem,
+  TimelineLine,
+} from "@/components/ui/timeline"
 import { buttonVariants } from "@/components/ui/button"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { type ReactNode } from "react"
 
-const SVG1 =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Crect width='1200' height='700' fill='%234e6f4d'/%3E%3Ccircle cx='880' cy='180' r='150' fill='%23e6b450'/%3E%3Cpath d='M0 520 C220 410 390 560 610 430 C800 320 930 420 1200 280 L1200 700 L0 700 Z' fill='%2326351f'/%3E%3Cpath d='M0 610 C230 520 460 630 690 520 C890 430 990 500 1200 390 L1200 700 L0 700 Z' fill='%237a4f2a'/%3E%3C/svg%3E"
-
-const SVG2 =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Crect width='1200' height='700' fill='%2336284f'/%3E%3Ccircle cx='260' cy='190' r='120' fill='%23f2c46d'/%3E%3Cpath d='M0 450 L190 350 L380 470 L610 300 L830 460 L1000 360 L1200 460 L1200 700 L0 700 Z' fill='%235e7550'/%3E%3Cpath d='M0 560 L250 480 L500 570 L720 460 L960 590 L1200 510 L1200 700 L0 700 Z' fill='%23c07936'/%3E%3C/svg%3E"
-
-const SVG3 =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Crect width='1200' height='700' fill='%231d3140'/%3E%3Ccircle cx='1000' cy='150' r='120' fill='%23ffcf70'/%3E%3Cpath d='M0 500 C180 380 330 540 520 420 C720 295 880 450 1200 300 L1200 700 L0 700 Z' fill='%23325a4b'/%3E%3Cpath d='M0 620 C220 500 420 650 650 520 C850 410 1020 560 1200 470 L1200 700 L0 700 Z' fill='%23b86d38'/%3E%3C/svg%3E"
-
 const SECTION = "mx-auto max-w-5xl px-4 sm:px-6 lg:px-8"
+
+const TONES: Record<"warm" | "cool" | "forest", string> = {
+  warm: "bg-gradient-to-br from-amber-400/45 via-orange-900/40 to-zinc-950",
+  cool: "bg-gradient-to-tr from-sky-500/35 via-indigo-900/45 to-zinc-950",
+  forest: "bg-gradient-to-br from-emerald-400/35 via-teal-900/40 to-zinc-950",
+}
+
+function ScenePanel({ tone }: { tone: keyof typeof TONES }) {
+  return (
+    <div
+      className={cn("relative size-full overflow-hidden", TONES[tone])}
+      role="img"
+      aria-label="Decorative scroll-reveal scene panel"
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_25%,rgba(255,255,255,0.07)_0%,transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_85%,rgba(0,0,0,0.25)_0%,transparent_50%)]" />
+    </div>
+  )
+}
 
 function Tag({ children }: { children: ReactNode }) {
   return (
@@ -108,33 +127,6 @@ function SceneSection({
         </div>
       </div>
     </section>
-  )
-}
-
-function InstallStep({
-  number,
-  title,
-  isLast = false,
-  children,
-}: {
-  number: string
-  title: string
-  isLast?: boolean
-  children: ReactNode
-}) {
-  return (
-    <div className="flex gap-5">
-      <div className="flex flex-col items-center">
-        <div className="size-7 shrink-0 rounded-full border border-amber-500/40 bg-amber-500/10 flex items-center justify-center font-mono text-xs font-bold text-amber-600 dark:text-amber-400">
-          {number}
-        </div>
-        {!isLast && <div className="mt-2 w-px flex-1 bg-border" />}
-      </div>
-      <div className={isLast ? "pt-0.5 pb-0" : "pb-10 pt-0.5"}>
-        <p className="text-sm font-semibold">{title}</p>
-        <div className="mt-2 text-sm text-muted-foreground">{children}</div>
-      </div>
-    </div>
   )
 }
 
@@ -269,7 +261,7 @@ export default function Home() {
 
             <p className="max-w-[52ch] text-base leading-relaxed text-muted-foreground">
               Sticky image reveals with animated captions. Built on the CSS
-              Scroll-Driven Animations API — zero JavaScript, fully accessible,
+              Scroll-Driven Animations API. Zero JavaScript, fully accessible,
               respects <Inline>prefers-reduced-motion</Inline>.
             </p>
 
@@ -298,7 +290,7 @@ export default function Home() {
       <ScrollReveal
         imageEnter="left"
         imageStickTop="4.5rem"
-        image={<img src={SVG1} alt="Abstract green landscape with warm sun" />}
+        image={<ScenePanel tone="warm" />}
         caption={
           <>
             <h2 className="mb-2 text-xl font-semibold">
@@ -323,7 +315,7 @@ export default function Home() {
         captionMotion="left-center"
         imageStickTop="4.5rem"
         captionMotionDistance="70vw"
-        image={<img src={SVG2} alt="Abstract purple mountain landscape" />}
+        image={<ScenePanel tone="cool" />}
         caption={
           <>
             <h2 className="mb-2 text-xl font-semibold">
@@ -349,7 +341,7 @@ export default function Home() {
         imageStickTop="4.5rem"
         captionMotionDistance="90vw"
         captionMaxWidth="34rem"
-        image={<img src={SVG3} alt="Abstract dark blue landscape with warm hills" />}
+        image={<ScenePanel tone="forest" />}
         caption={
           <>
             <h2 className="mb-2 text-xl font-semibold">
@@ -366,54 +358,115 @@ export default function Home() {
       <Separator />
 
       {/* ── Installing ───────────────────────────────────────────── */}
-      <section className={cn(SECTION, "py-16")}>
+      <section className={cn(SECTION, "flex flex-col gap-4 py-16")}>
         <h2 className="text-3xl font-bold tracking-tight">Installing</h2>
-        <p className="mt-2 text-muted-foreground">
-          Add the component to any existing shadcn project.
-        </p>
 
-        <Tabs defaultValue="auto" className="mt-8">
-          <TabsList className="mb-6 w-full [&>*]:flex-1">
-            <TabsTrigger value="auto">Auto (CLI)</TabsTrigger>
+        <Tabs defaultValue="cli" aria-label="Choose installation method">
+          <TabsList className="mb-2 w-full [&>*]:flex-1">
+            <TabsTrigger value="cli">Auto</TabsTrigger>
             <TabsTrigger value="manual">Manual</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="auto" className="flex flex-col gap-4">
-            <p className="text-sm text-muted-foreground">
-              One command installs the component and all dependencies.
-            </p>
+          <TabsContent className="flex flex-col gap-3" value="cli">
+            <span className="text-sm text-muted-foreground">
+              Install Scroll Reveal using the shadcn CLI.
+            </span>
             <CopyCommand />
-            <p className="text-sm text-muted-foreground">
-              Then append the <Inline>@layer vanilla-scroll-sky</Inline> block
-              from the{" "}
-              <a
-                href={siteConfig.githubUrl}
-                className="text-amber-600 underline underline-offset-4 transition-colors hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300"
-              >
-                GitHub repo
-              </a>{" "}
-              to your <Inline>globals.css</Inline>.
-            </p>
+            <Alert variant="warning">
+              <Info className="size-4" />
+              <AlertTitle>One more step</AlertTitle>
+              <AlertDescription>
+                The CLI copies the component file but not the CSS layer. Append
+                the <Inline>@layer vanilla-scroll-sky</Inline> block from{" "}
+                <a
+                  href={`${siteConfig.githubUrl}/blob/main/src/app/globals.css`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-amber-300"
+                >
+                  globals.css
+                </a>{" "}
+                to your project&apos;s global stylesheet.
+              </AlertDescription>
+            </Alert>
           </TabsContent>
 
-          <TabsContent value="manual" className="flex flex-col gap-0">
-            <InstallStep number="1" title="Add the CSS layer">
-              Copy the <Inline>@layer vanilla-scroll-sky</Inline> block from{" "}
-              <a
-                href={siteConfig.githubUrl}
-                className="text-amber-600 underline underline-offset-4 transition-colors hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300"
-              >
-                globals.css on GitHub
-              </a>{" "}
-              and append it to your project&apos;s <Inline>globals.css</Inline>.
-              This is the only CSS you need — the component itself has no styles.
-            </InstallStep>
-            <InstallStep number="2" title="Copy the component" isLast>
-              Copy <Inline>scroll-reveal.tsx</Inline> into{" "}
-              <Inline>components/scroll-reveal/</Inline> in your project. It has
-              no runtime dependencies — only the CSS layer and{" "}
-              <Inline>@/lib/utils</Inline>.
-            </InstallStep>
+          <TabsContent className="flex flex-col gap-2" value="manual">
+            <span className="text-sm text-muted-foreground">
+              Install Scroll Reveal manually by copying the file contents.
+            </span>
+
+            <Timeline className="ps-2">
+              <TimelineItem status="done">
+                <TimelineHeading>Add the CSS layer</TimelineHeading>
+                <TimelineDot status="current" />
+                <TimelineLine />
+                <TimelineContent className="flex w-full flex-col gap-y-4 overflow-hidden text-balance pt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Copy the <Inline>@layer vanilla-scroll-sky</Inline> block
+                    from{" "}
+                    <a
+                      href={`${siteConfig.githubUrl}/blob/main/src/app/globals.css`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-amber-600 underline underline-offset-4 hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300"
+                    >
+                      globals.css on GitHub
+                    </a>{" "}
+                    and append it to your project&apos;s{" "}
+                    <Inline>globals.css</Inline> file.
+                  </p>
+                  <Alert>
+                    <Info className="size-4" />
+                    <AlertTitle>Note</AlertTitle>
+                    <AlertDescription>
+                      This CSS block is the only styling the component needs.
+                      The component file itself ships no styles.
+                    </AlertDescription>
+                  </Alert>
+                </TimelineContent>
+              </TimelineItem>
+
+              <TimelineItem>
+                <TimelineHeading>Copy the component</TimelineHeading>
+                <TimelineDot />
+                <TimelineLine />
+                <TimelineContent className="flex w-full flex-col gap-y-4 overflow-hidden text-balance pt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Copy <Inline>scroll-reveal.tsx</Inline> from{" "}
+                    <a
+                      href={`${siteConfig.githubUrl}/blob/main/src/registry/new-york/components/scroll-reveal/scroll-reveal.tsx`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-amber-600 underline underline-offset-4 hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300"
+                    >
+                      the registry
+                    </a>{" "}
+                    into <Inline>components/scroll-reveal/</Inline> inside your
+                    project.
+                  </p>
+                  <Alert>
+                    <Info className="size-4" />
+                    <AlertTitle>Zero dependencies</AlertTitle>
+                    <AlertDescription>
+                      The component imports only <Inline>@/lib/utils</Inline>,
+                      which already exists in every shadcn project.
+                    </AlertDescription>
+                  </Alert>
+                </TimelineContent>
+              </TimelineItem>
+
+              <TimelineItem>
+                <TimelineHeading>Done</TimelineHeading>
+                <TimelineDot />
+                <TimelineContent className="pt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Import <Inline>ScrollReveal</Inline> and drop it into any
+                    page. See the Props reference below for every option.
+                  </p>
+                </TimelineContent>
+              </TimelineItem>
+            </Timeline>
           </TabsContent>
         </Tabs>
       </section>
